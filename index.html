@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ thống Bốc đề Vấn đáp - Đồ án Thiết kế Cầu</title>
+    <style>
+        :root {
+            --primary: #1a4f8b;
+            --accent: #d9381e;
+            --bg: #f4f7f6;
+            --card: #ffffff;
+            --text: #2c3e50;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background-color: var(--card);
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+            width: 100%;
+            max-width: 650px;
+            padding: 24px;
+            box-sizing: border-box;
+        }
+        .header {
+            text-align: center;
+            border-bottom: 2px solid #eaedf1;
+            padding-bottom: 16px;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            color: var(--primary);
+            font-size: 1.35rem;
+            margin: 0 0 6px 0;
+            text-transform: uppercase;
+        }
+        .header p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: #64748b;
+            font-weight: 500;
+        }
+        .form-group {
+            margin-bottom: 16px;
+        }
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: #334155;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 1rem;
+            box-sizing: border-box;
+            transition: border-color 0.2s;
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(26, 79, 139, 0.15);
+        }
+        .btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+        }
+        .btn:hover {
+            background-color: #123866;
+        }
+        .btn:active {
+            transform: scale(0.99);
+        }
+        .exam-card {
+            display: none;
+            margin-top: 24px;
+            border: 2px dashed var(--primary);
+            background: #f8fafc;
+            border-radius: 10px;
+            padding: 20px;
+        }
+        .exam-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #cbd5e1;
+            padding-bottom: 10px;
+            margin-bottom: 14px;
+        }
+        .exam-title h2 {
+            margin: 0;
+            color: var(--accent);
+            font-size: 1.25rem;
+        }
+        .timestamp {
+            font-size: 0.82rem;
+            color: #64748b;
+            background: #e2e8f0;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+        .student-info {
+            font-size: 0.95rem;
+            background: #e0f2fe;
+            color: #0369a1;
+            padding: 10px 14px;
+            border-radius: 6px;
+            margin-bottom: 16px;
+            font-weight: 600;
+        }
+        .question-item {
+            margin-bottom: 14px;
+            line-height: 1.5;
+            font-size: 0.98rem;
+        }
+        .question-num {
+            font-weight: 700;
+            color: var(--primary);
+        }
+        .notice {
+            margin-top: 15px;
+            font-size: 0.85rem;
+            color: #dc2626;
+            text-align: center;
+            font-style: italic;
+        }
+        .admin-section {
+            margin-top: 30px;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 15px;
+            text-align: center;
+        }
+        .admin-btn {
+            background: transparent;
+            border: 1px solid #94a3b8;
+            color: #64748b;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>VẤN ĐÁP ĐỒ ÁN THIẾT KẾ CẦU</h1>
+        <p>Học kỳ 1 - Năm học 2026 - 2027</p>
+    </div>
+
+    <div id="step-input">
+        <div class="form-group">
+            <label for="mssv">Mã số sinh viên (MSSV) *</label>
+            <input type="text" id="mssv" placeholder="Ví dụ: 20081234" required>
+        </div>
+        <div class="form-group">
+            <label for="fullname">Họ và tên sinh viên *</label>
+            <input type="text" id="fullname" placeholder="Ví dụ: Nguyễn Văn An" required>
+        </div>
+        <button class="btn" onclick="drawExam()">XÁC NHẬN & BỐC ĐỀ THI</button>
+    </div>
+
+    <div id="step-exam" class="exam-card">
+        <div class="student-info" id="display-info"></div>
+        <div class="exam-title">
+            <h2 id="display-exam-id">ĐỀ THI: DE_01</h2>
+            <span class="timestamp" id="display-time">13:30:15 - 30/10/2026</span>
+        </div>
+        <div id="question-list"></div>
+        <div class="notice">
+            * Vui lòng chụp màn hình hoặc giữ nguyên trang này để báo cáo Giảng viên khi đến lượt hỏi thi.
+        </div>
+    </div>
+
+    <div class="admin-section">
+        <button class="admin-btn" onclick="exportData()">Xuất danh sách sinh viên đã bốc đề (Excel/CSV)</button>
+    </div>
+</div>
+
+<script>
+const EXAMS_DATA = [{"exam_id": "DE_01", "q_indices": [31, 12, 1], "q_texts": ["Trong cầu không có phần bộ hành, xe HL-93 có thể đi sát bệ lan can. Quy định về khoảng cách từ tim bánh xe HL-93 đến mép trong bệ lan can (bản hẫng) và đến gối (bản kiểu dầm) như thế nào?", "Hệ số phân bố tải trọng (hệ số phân bố ngang) chỉ được xem xét ở giai đoạn làm việc nào của dầm dọc? Ý nghĩa của hệ số phân bố ngang?", "Nêu các loại mất mát ứng suất trong dầm BTCT dự ứng lực theo phương pháp căng trước? Ý nghĩa của việc tính toán mất mát dự ứng lực?"]}, {"exam_id": "DE_02", "q_indices": [32, 24, 9], "q_texts": ["Khi kiểm toán bản hẫng mặt cầu BTCT, bạn kiểm toán tại tiết diện nào? Tại sao? Theo các TTGH nào? Ở mỗi TTGH, kiểm toán các nội dung gì?", "Tại sao phải tính toán hệ số phân bố ngang (phân bố tải trọng)? Hệ số phân bố ngang thường dùng để tính toán nội lực bộ phận nào của kết cấu nhịp? Khi sử dụng các phần mềm phân tích kết cấu như MIDAS/Civil, SHAP2000 có cần tính toán hệ số phân bố ngang nữa hay không?", "Trình bày nội dung kiểm toán dầm I BTCT dự ứng lực tại các tiết diện theo tiêu chuẩn TCVN 11823:2017? Kể tên các loại cốt thép thường sử dụng trong cấu kiện dầm BTCT dự ứng lực?"]}, {"exam_id": "DE_03", "q_indices": [23, 14, 4], "q_texts": ["Đặc điểm của tải trọng làn trong tiêu chuẩn TCVN 11823:2017? Ý nghĩa của hệ số làn xe (m)? Tải trọng làn xuất hiện trong các trường hợp nào khi phân tích nội lực? Hệ số làn xe (m) sử dụng trong các trường hợp nào?", "Tác dụng của dầm ngang trong kết cấu nhịp hệ cầu dầm dầm I? Đặc điểm tính toán nội lực dầm ngang? Các giả thiết khi tính toán dầm ngang?", "Thế nào là dầm I BTCT dự ứng lực căng trước, căng sau và căng ngoài? Ưu nhược điểm của từng công nghệ?"]}, {"exam_id": "DE_04", "q_indices": [31, 37, 36], "q_texts": ["Trong cầu không có phần bộ hành, xe HL-93 có thể đi sát bệ lan can. Quy định về khoảng cách từ tim bánh xe HL-93 đến mép trong bệ lan can (bản hẫng) và đến gối (bản kiểu dầm) như thế nào?", "Ý nghĩa của hệ số phân bố ngang? Hệ số phân bố ngang của mỗi dầm dọc phụ thuộc vào các yếu tố nào? Các phương pháp tính hệ số phân bố ngang? Phương pháp tính toán hệ số phân bố ngang có áp dụng được cho hệ dầm nhịp liên tục không?", "Kết quả tính toán mất mát dự ứng lực được dùng để kiểm toán theo trạng thái giới hạn nào, nội dung nào trong thiết kế dầm? Tính toán mất mát ứng suất trước theo phương pháp căng trước và căng sau có gì giống và khác nhau?"]}, {"exam_id": "DE_05", "q_indices": [13, 35, 18], "q_texts": ["Trình bày quy định về việc bố trí hoạt tải xe HL-93 theo phương ngang cầu?", "Nêu vai trò của dầm ngang? Không bố trí dầm ngang trong các trường hợp nào? Nếu bỏ dầm ngang thì phương pháp tính toán thủ công sẽ thay đổi như thế nào?", "Khi thiết kế dầm dọc BTCT, TTGH nào cần phải quy đổi tiết diện thực tế sang tiết diện kiểm toán? Tại sao phải quy đổi tiết diện? Các nguyên tắc quy đổi tiết diện?"]}, {"exam_id": "DE_06", "q_indices": [6, 12, 3], "q_texts": ["Cách bố trí cốt thép thường trên bản mặt cầu? Lưới cốt thép trên và dưới có khác nhau không? Tại sao?", "Hệ số phân bố tải trọng (hệ số phân bố ngang) chỉ được xem xét ở giai đoạn làm việc nào của dầm dọc? Ý nghĩa của hệ số phân bố ngang?", "Trong dầm BTCT dự ứng lực theo phương pháp căng sau thì có những mất mát dự ứng lực nào? Những mất mát dự ứng lực nào là tức thời và mất mát dự ứng lực nào là lâu dài?"]}, {"exam_id": "DE_07", "q_indices": [23, 14, 22], "q_texts": ["Đặc điểm của tải trọng làn trong tiêu chuẩn TCVN 11823:2017? Ý nghĩa của hệ số làn xe (m)? Tải trọng làn xuất hiện trong các trường hợp nào khi phân tích nội lực? Hệ số làn xe (m) sử dụng trong các trường hợp nào?", "Tác dụng của dầm ngang trong kết cấu nhịp hệ cầu dầm dầm I? Đặc điểm tính toán nội lực dầm ngang? Các giả thiết khi tính toán dầm ngang?", "Vai trò và cách tạo độ vồng trong dầm I BTCT?"]}, {"exam_id": "DE_08", "q_indices": [30, 12, 36], "q_texts": ["Khi thiết kế bản mặt cầu BTCT, người ta thường bố trí 2 lưới cốt thép chịu lực? Ý nghĩa của việc này là gì? Cốt thép nào nằm trong vùng chịu kéo hay nén của bê tông đóng vai trò chịu lực chính? Tác dụng của cốt thép nằm trong vùng chịu nén của bê tông?", "Hệ số phân bố tải trọng (hệ số phân bố ngang) chỉ được xem xét ở giai đoạn làm việc nào của dầm dọc? Ý nghĩa của hệ số phân bố ngang?", "Kết quả tính toán mất mát dự ứng lực được dùng để kiểm toán theo trạng thái giới hạn nào, nội dung nào trong thiết kế dầm? Tính toán mất mát ứng suất trước theo phương pháp căng trước và căng sau có gì giống và khác nhau?"]}, {"exam_id": "DE_09", "q_indices": [23, 37, 36], "q_texts": ["Đặc điểm của tải trọng làn trong tiêu chuẩn TCVN 11823:2017? Ý nghĩa của hệ số làn xe (m)? Tải trọng làn xuất hiện trong các trường hợp nào khi phân tích nội lực? Hệ số làn xe (m) sử dụng trong các trường hợp nào?", "Ý nghĩa của hệ số phân bố ngang? Hệ số phân bố ngang của mỗi dầm dọc phụ thuộc vào các yếu tố nào? Các phương pháp tính hệ số phân bố ngang? Phương pháp tính toán hệ số phân bố ngang có áp dụng được cho hệ dầm nhịp liên tục không?", "Kết quả tính toán mất mát dự ứng lực được dùng để kiểm toán theo trạng thái giới hạn nào, nội dung nào trong thiết kế dầm? Tính toán mất mát ứng suất trước theo phương pháp căng trước và căng sau có gì giống và khác nhau?"]}, {"exam_id": "DE_10", "q_indices": [27, 14, 20], "q_texts": ["Thế nào là bản hai cạnh (bản kiểu dầm), bản bốn cạnh? Sự khác biệt về tính toán giữa hai loại bản này? Trong tính toán xác định nội lực bản mặt cầu BTCT, chiều dài nhịp tính toán được xác định như thế nào?", "Tác dụng của dầm ngang trong kết cấu nhịp hệ cầu dầm dầm I? Đặc điểm tính toán nội lực dầm ngang? Các giả thiết khi tính toán dầm ngang?", "Nêu tên các loại mất mát ứng suất trong cáp dự ứng lực? Mất mát nào xảy ra trong giai đoạn thi công? Mất mát nào xảy ra trong giai đoạn khai thác?"]}, {"exam_id": "DE_11", "q_indices": [30, 24, 1], "q_texts": ["Khi thiết kế bản mặt cầu BTCT, người ta thường bố trí 2 lưới cốt thép chịu lực? Ý nghĩa của việc này là gì? Cốt thép nào nằm trong vùng chịu kéo hay nén của bê tông đóng vai trò chịu lực chính? Tác dụng của cốt thép nằm trong vùng chịu nén của bê tông?", "Tại sao phải tính toán hệ số phân bố ngang (phân bố tải trọng)? Hệ số phân bố ngang thường dùng để tính toán nội lực bộ phận nào của kết cấu nhịp? Khi sử dụng các phần mềm phân tích kết cấu như MIDAS/Civil, SHAP2000 có cần tính toán hệ số phân bố ngang nữa hay không?", "Nêu các loại mất mát ứng suất trong dầm BTCT dự ứng lực theo phương pháp căng trước? Ý nghĩa của việc tính toán mất mát dự ứng lực?"]}, {"exam_id": "DE_12", "q_indices": [33, 14, 18], "q_texts": ["Khi kiểm toán bản mặt cầu kiểu dầm BTCT, bạn kiểm toán những tiết diện nào? Tại sao? Theo các TTGH nào? Ở mỗi TTGH, kiểm toán các nội dung gì?", "Tác dụng của dầm ngang trong kết cấu nhịp hệ cầu dầm dầm I? Đặc điểm tính toán nội lực dầm ngang? Các giả thiết khi tính toán dầm ngang?", "Khi thiết kế dầm dọc BTCT, TTGH nào cần phải quy đổi tiết diện thực tế sang tiết diện kiểm toán? Tại sao phải quy đổi tiết diện? Các nguyên tắc quy đổi tiết diện?"]}, {"exam_id": "DE_13", "q_indices": [26, 24, 5], "q_texts": ["Trình bày các yêu cầu về cấu tạo bản mặt cầu BTCT?", "Tại sao phải tính toán hệ số phân bố ngang (phân bố tải trọng)? Hệ số phân bố ngang thường dùng để tính toán nội lực bộ phận nào của kết cấu nhịp? Khi sử dụng các phần mềm phân tích kết cấu như MIDAS/Civil, SHAP2000 có cần tính toán hệ số phân bố ngang nữa hay không?", "Tại sao khi căng cáp phải căng từng đầu một mà không được căng cùng một lúc hai đầu?"]}, {"exam_id": "DE_14", "q_indices": [23, 24, 4], "q_texts": ["Đặc điểm của tải trọng làn trong tiêu chuẩn TCVN 11823:2017? Ý nghĩa của hệ số làn xe (m)? Tải trọng làn xuất hiện trong các trường hợp nào khi phân tích nội lực? Hệ số làn xe (m) sử dụng trong các trường hợp nào?", "Tại sao phải tính toán hệ số phân bố ngang (phân bố tải trọng)? Hệ số phân bố ngang thường dùng để tính toán nội lực bộ phận nào của kết cấu nhịp? Khi sử dụng các phần mềm phân tích kết cấu như MIDAS/Civil, SHAP2000 có cần tính toán hệ số phân bố ngang nữa hay không?", "Thế nào là dầm I BTCT dự ứng lực căng trước, căng sau và căng ngoài? Ưu nhược điểm của từng công nghệ?"]}, {"exam_id": "DE_15", "q_indices": [13, 34, 4], "q_texts": ["Trình bày quy định về việc bố trí hoạt tải xe HL-93 theo phương ngang cầu?", "Trong kết cấu nhịp cầu dầm, dầm ngang thường bố trí ở vị trí nào? Dầm ngang trên mố trụ có gì khác so với dầm ngang trung gian nhịp cầu? Cơ sở bố trí dầm ngang?", "Thế nào là dầm I BTCT dự ứng lực căng trước, căng sau và căng ngoài? Ưu nhược điểm của từng công nghệ?"]}, {"exam_id": "DE_16", "q_indices": [26, 24, 10], "q_texts": ["Trình bày các yêu cầu về cấu tạo bản mặt cầu BTCT?", "Tại sao phải tính toán hệ số phân bố ngang (phân bố tải trọng)? Hệ số phân bố ngang thường dùng để tính toán nội lực bộ phận nào của kết cấu nhịp? Khi sử dụng các phần mềm phân tích kết cấu như MIDAS/Civil, SHAP2000 có cần tính toán hệ số phân bố ngang nữa hay không?", "Trình bày khái niệm, ưu, nhược điểm của dầm bê tông cốt thép dự ứng lực?"]}, {"exam_id": "DE_17", "q_indices": [33, 12, 20], "q_texts": ["Khi kiểm toán bản mặt cầu kiểu dầm BTCT, bạn kiểm toán những tiết diện nào? Tại sao? Theo các TTGH nào? Ở mỗi TTGH, kiểm toán các nội dung gì?", "Hệ số phân bố tải trọng (hệ số phân bố ngang) chỉ được xem xét ở giai đoạn làm việc nào của dầm dọc? Ý nghĩa của hệ số phân bố ngang?", "Nêu tên các loại mất mát ứng suất trong cáp dự ứng lực? Mất mát nào xảy ra trong giai đoạn thi công? Mất mát nào xảy ra trong giai đoạn khai thác?"]}, {"exam_id": "DE_18", "q_indices": [29, 12, 17], "q_texts": ["Trong tính toán xác định nội lực bản mặt cầu BTCT, bề rộng dải bản tương đương là gì? Bề rộng tương đương được xét đến khi nào?", "Hệ số phân bố tải trọng (hệ số phân bố ngang) chỉ được xem xét ở giai đoạn làm việc nào của dầm dọc? Ý nghĩa của hệ số phân bố ngang?", "Ý nghĩa của bề rộng bản cánh có hiệu trong cầu dầm BTCT? Tính toán bề rộng có hiệu bản biên và bản giữa của dầm có giống nhau không? Cần tính toán bề rộng bản cánh có hiệu trong giai đoạn làm việc nào của dầm? Ở nội dung kiểm toán theo TTGH nào?"]}, {"exam_id": "DE_19", "q_indices": [13, 35, 11], "q_texts": ["Trình bày quy định về việc bố trí hoạt tải xe HL-93 theo phương ngang cầu?", "Nêu vai trò của dầm ngang? Không bố trí dầm ngang trong các trường hợp nào? Nếu bỏ dầm ngang thì phương pháp tính toán thủ công sẽ thay đổi như thế nào?", "Ý nghĩa của việc xác định trọng tâm diện tích cáp dự ứng lực trong dầm bê tông cốt thép dự ứng lực? Tác dụng của việc kéo xiên đường cáp phần đầu dầm giản đơn?"]}, {"exam_id": "DE_20", "q_indices": [31, 35, 16], "q_texts": ["Trong cầu không có phần bộ hành, xe HL-93 có thể đi sát bệ lan can. Quy định về khoảng cách từ tim bánh xe HL-93 đến mép trong bệ lan can (bản hẫng) và đến gối (bản kiểu dầm) như thế nào?", "Nêu vai trò của dầm ngang? Không bố trí dầm ngang trong các trường hợp nào? Nếu bỏ dầm ngang thì phương pháp tính toán thủ công sẽ thay đổi như thế nào?", "Kể tên các tải trọng tác dụng lên dầm dọc I trong giai đoạn thi công và khai thác? Tải trọng nào gây ra nội lực cho dầm tại các tiết diện?"]}, {"exam_id": "DE_21", "q_indices": [30, 14, 3], "q_texts": ["Khi thiết kế bản mặt cầu BTCT, người ta thường bố trí 2 lưới cốt thép chịu lực? Ý nghĩa của việc này là gì? Cốt thép nào nằm trong vùng chịu kéo hay nén của bê tông đóng vai trò chịu lực chính? Tác dụng của cốt thép nằm trong vùng chịu nén của bê tông?", "Tác dụng của dầm ngang trong kết cấu nhịp hệ cầu dầm dầm I? Đặc điểm tính toán nội lực dầm ngang? Các giả thiết khi tính toán dầm ngang?", "Trong dầm BTCT dự ứng lực theo phương pháp căng sau thì có những mất mát dự ứng lực nào? Những mất mát dự ứng lực nào là tức thời và mất mát dự ứng lực nào là lâu dài?"]}, {"exam_id": "DE_22", "q_indices": [6, 37, 9], "q_texts": ["Cách bố trí cốt thép thường trên bản mặt cầu? Lưới cốt thép trên và dưới có khác nhau không? Tại sao?", "Ý nghĩa của hệ số phân bố ngang? Hệ số phân bố ngang của mỗi dầm dọc phụ thuộc vào các yếu tố nào? Các phương pháp tính hệ số phân bố ngang? Phương pháp tính toán hệ số phân bố ngang có áp dụng được cho hệ dầm nhịp liên tục không?", "Trình bày nội dung kiểm toán dầm I BTCT dự ứng lực tại các tiết diện theo tiêu chuẩn TCVN 11823:2017? Kể tên các loại cốt thép thường sử dụng trong cấu kiện dầm BTCT dự ứng lực?"]}, {"exam_id": "DE_23", "q_indices": [33, 24, 3], "q_texts": ["Khi kiểm toán bản mặt cầu kiểu dầm BTCT, bạn kiểm toán những tiết diện nào? Tại sao? Theo các TTGH nào? Ở mỗi TTGH, kiểm toán các nội dung gì?", "Tại sao phải tính toán hệ số phân bố ngang (phân bố tải trọng)? Hệ số phân bố ngang thường dùng để tính toán nội lực bộ phận nào của kết cấu nhịp? Khi sử dụng các phần mềm phân tích kết cấu như MIDAS/Civil, SHAP2000 có cần tính toán hệ số phân bố ngang nữa hay không?", "Trong dầm BTCT dự ứng lực theo phương pháp căng sau thì có những mất mát dự ứng lực nào? Những mất mát dự ứng lực nào là tức thời và mất mát dự ứng lực nào là lâu dài?"]}, {"exam_id": "DE_24", "q_indices": [23, 12, 17], "q_texts": ["Đặc điểm của tải trọng làn trong tiêu chuẩn TCVN 11823:2017? Ý nghĩa của hệ số làn xe (m)? Tải trọng làn xuất hiện trong các trường hợp nào khi phân tích nội lực? Hệ số làn xe (m) sử dụng trong các trường hợp nào?", "Hệ số phân bố tải trọng (hệ số phân bố ngang) chỉ được xem xét ở giai đoạn làm việc nào của dầm dọc? Ý nghĩa của hệ số phân bố ngang?", "Ý nghĩa của bề rộng bản cánh có hiệu trong cầu dầm BTCT? Tính toán bề rộng có hiệu bản biên và bản giữa của dầm có giống nhau không? Cần tính toán bề rộng bản cánh có hiệu trong giai đoạn làm việc nào của dầm? Ở nội dung kiểm toán theo TTGH nào?"]}, {"exam_id": "DE_25", "q_indices": [25, 34, 16], "q_texts": ["Trình bày về hoạt tải thiết kế HL-93, các hệ số tải trọng và hệ số xung kích đối với hoạt tải HL-93?", "Trong kết cấu nhịp cầu dầm, dầm ngang thường bố trí ở vị trí nào? Dầm ngang trên mố trụ có gì khác so với dầm ngang trung gian nhịp cầu? Cơ sở bố trí dầm ngang?", "Kể tên các tải trọng tác dụng lên dầm dọc I trong giai đoạn thi công và khai thác? Tải trọng nào gây ra nội lực cho dầm tại các tiết diện?"]}, {"exam_id": "DE_26", "q_indices": [19, 24, 16], "q_texts": ["Đặc điểm hoạt tải HL-93? Khi nào có thể nhân tải trọng trục xe với 0,65 hoặc 0,5 trong thiết kế cầu? Và tải trọng trục xe khi đó như thế nào?", "Tại sao phải tính toán hệ số phân bố ngang (phân bố tải trọng)? Hệ số phân bố ngang thường dùng để tính toán nội lực bộ phận nào của kết cấu nhịp? Khi sử dụng các phần mềm phân tích kết cấu như MIDAS/Civil, SHAP2000 có cần tính toán hệ số phân bố ngang nữa hay không?", "Kể tên các tải trọng tác dụng lên dầm dọc I trong giai đoạn thi công và khai thác? Tải trọng nào gây ra nội lực cho dầm tại các tiết diện?"]}, {"exam_id": "DE_27", "q_indices": [23, 37, 10], "q_texts": ["Đặc điểm của tải trọng làn trong tiêu chuẩn TCVN 11823:2017? Ý nghĩa của hệ số làn xe (m)? Tải trọng làn xuất hiện trong các trường hợp nào khi phân tích nội lực? Hệ số làn xe (m) sử dụng trong các trường hợp nào?", "Ý nghĩa của hệ số phân bố ngang? Hệ số phân bố ngang của mỗi dầm dọc phụ thuộc vào các yếu tố nào? Các phương pháp tính hệ số phân bố ngang? Phương pháp tính toán hệ số phân bố ngang có áp dụng được cho hệ dầm nhịp liên tục không?", "Trình bày khái niệm, ưu, nhược điểm của dầm bê tông cốt thép dự ứng lực?"]}, {"exam_id": "DE_28", "q_indices": [32, 37, 3], "q_texts": ["Khi kiểm toán bản hẫng mặt cầu BTCT, bạn kiểm toán tại tiết diện nào? Tại sao? Theo các TTGH nào? Ở mỗi TTGH, kiểm toán các nội dung gì?", "Ý nghĩa của hệ số phân bố ngang? Hệ số phân bố ngang của mỗi dầm dọc phụ thuộc vào các yếu tố nào? Các phương pháp tính hệ số phân bố ngang? Phương pháp tính toán hệ số phân bố ngang có áp dụng được cho hệ dầm nhịp liên tục không?", "Trong dầm BTCT dự ứng lực theo phương pháp căng sau thì có những mất mát dự ứng lực nào? Những mất mát dự ứng lực nào là tức thời và mất mát dự ứng lực nào là lâu dài?"]}, {"exam_id": "DE_29", "q_indices": [30, 37, 7], "q_texts": ["Khi thiết kế bản mặt cầu BTCT, người ta thường bố trí 2 lưới cốt thép chịu lực? Ý nghĩa của việc này là gì? Cốt thép nào nằm trong vùng chịu kéo hay nén của bê tông đóng vai trò chịu lực chính? Tác dụng của cốt thép nằm trong vùng chịu nén của bê tông?", "Ý nghĩa của hệ số phân bố ngang? Hệ số phân bố ngang của mỗi dầm dọc phụ thuộc vào các yếu tố nào? Các phương pháp tính hệ số phân bố ngang? Phương pháp tính toán hệ số phân bố ngang có áp dụng được cho hệ dầm nhịp liên tục không?", "Cách chọn bó và vị trí chuyển hướng cáp của các bó cốt thép xiên trong dầm BTCT theo phương pháp căng sau? Ý nghĩa của biểu đồ bao mô men? Biểu đồ bao vật liệu?"]}, {"exam_id": "DE_30", "q_indices": [29, 37, 9], "q_texts": ["Trong tính toán xác định nội lực bản mặt cầu BTCT, bề rộng dải bản tương đương là gì? Bề rộng tương đương được xét đến khi nào?", "Ý nghĩa của hệ số phân bố ngang? Hệ số phân bố ngang của mỗi dầm dọc phụ thuộc vào các yếu tố nào? Các phương pháp tính hệ số phân bố ngang? Phương pháp tính toán hệ số phân bố ngang có áp dụng được cho hệ dầm nhịp liên tục không?", "Trình bày nội dung kiểm toán dầm I BTCT dự ứng lực tại các tiết diện theo tiêu chuẩn TCVN 11823:2017? Kể tên các loại cốt thép thường sử dụng trong cấu kiện dầm BTCT dự ứng lực?"]}];
+
+// Cấu hình URL Google Apps Script Web App (nếu muốn tự động đẩy data về Google Sheets)
+const GOOGLE_SCRIPT_URL = ""; 
+
+function drawExam() {
+    const mssv = document.getElementById("mssv").value.trim();
+    const fullname = document.getElementById("fullname").value.trim();
+
+    if (!mssv || !fullname) {
+        alert("Vui lòng nhập đầy đủ Mã số sinh viên và Họ và tên!");
+        return;
+    }
+
+    // Kiểm tra xem sinh viên này đã từng bốc đề chưa (chống spam đổi đề)
+    let history = JSON.parse(localStorage.getItem("exam_records") || "[]");
+    let existingRecord = history.find(r => r.mssv.toLowerCase() === mssv.toLowerCase());
+
+    let selectedExam;
+    let recordTime;
+
+    if (existingRecord) {
+        // Nếu đã bốc đề trước đó thì giữ nguyên đề cũ
+        selectedExam = EXAMS_DATA.find(e => e.exam_id === existingRecord.exam_id);
+        recordTime = existingRecord.timestamp;
+        alert("Bạn đã bốc đề trước đó. Hệ thống giữ nguyên đề thi đã cấp!");
+    } else {
+        // Sinh ngẫu nhiên 1 trong 30 đề
+        const randIndex = Math.floor(Math.random() * EXAMS_DATA.length);
+        selectedExam = EXAMS_DATA[randIndex];
+        
+        const now = new Date();
+        recordTime = now.toLocaleDateString("vi-VN") + " " + now.toLocaleTimeString("vi-VN");
+
+        const newRecord = {
+            mssv: mssv,
+            fullname: fullname,
+            exam_id: selectedExam.exam_id,
+            q1: selectedExam.q_texts[0],
+            q2: selectedExam.q_texts[1],
+            q3: selectedExam.q_texts[2],
+            timestamp: recordTime
+        };
+
+        history.push(newRecord);
+        localStorage.setItem("exam_records", JSON.stringify(history));
+
+        // Nếu có Webhook Google Sheets thì POST dữ liệu
+        if (GOOGLE_SCRIPT_URL) {
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(newRecord)
+            }).catch(e => console.log("Google Sheets sync error:", e));
+        }
+    }
+
+    // Hiển thị ra màn hình
+    document.getElementById("step-input").style.display = "none";
+    const examCard = document.getElementById("step-exam");
+    examCard.style.display = "block";
+
+    document.getElementById("display-info").innerText = `Họ tên: ${fullname} | MSSV: ${mssv}`;
+    document.getElementById("display-exam-id").innerText = `ĐỀ SỐ: ${parseInt(selectedExam.exam_id.replace('DE_', ''))} (${selectedExam.exam_id})`;
+    document.getElementById("display-time").innerText = `Thời gian ghi nhận: ${recordTime}`;
+
+    let qHtml = "";
+    selectedExam.q_texts.forEach((q, idx) => {
+        qHtml += `<div class="question-item">
+            <span class="question-num">Câu ${idx + 1} (Gốc câu ${selectedExam.q_indices[idx]}):</span> ${q}
+        </div>`;
+    });
+    document.getElementById("question-list").innerHTML = qHtml;
+}
+
+function exportData() {
+    const history = JSON.parse(localStorage.getItem("exam_records") || "[]");
+    if (history.length === 0) {
+        alert("Chưa có sinh viên nào bốc đề!");
+        return;
+    }
+
+    let csvContent = "\uFEFF"; // UTF-8 BOM
+    csvContent += "STT,MSSV,Ho va Ten,Ma De,Thoi Gian Quet,Cau 1,Cau 2,Cau 3\n";
+
+    history.forEach((r, idx) => {
+        const row = [
+            idx + 1,
+            `"${r.mssv}"`,
+            `"${r.fullname}"`,
+            `"${r.exam_id}"`,
+            `"${r.timestamp}"`,
+            `"${r.q1.replace(/"/g, '""')}"`,
+            `"${r.q2.replace(/"/g, '""')}"`,
+            `"${r.q3.replace(/"/g, '""')}"`
+        ];
+        csvContent += row.join(",") + "\n";
+    });
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "Danh_sach_boc_de_van_dap_cau.csv";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+}
+</script>
+
+</body>
+</html>
